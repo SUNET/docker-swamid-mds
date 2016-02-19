@@ -33,17 +33,19 @@ cat>/etc/apache2/sites-available/default.conf<<EOF
        ServerAdmin operations@swamid.se
        DocumentRoot /var/www/
        ServerName md.swamid.se
-
        Alias /md /opt/published-metadata/
        <Directory /opt/published-metadata>
-          Options Indexes
+          Require all granted
+          Options Indexes FollowSymLinks
        </Directory>
        Alias /xslt /opt/swamid-metadata/xslt/
         <Directory /opt/swamid-metadata/xslt>
-          Options Indexes
+          Require all granted
+          Options Indexes FollowSymLinks
         </Directory>
        <Directory /var/www>
-          Options -Indexes
+          Require all granted
+          Options -Indexes +FollowSymLinks
        </Directory>
 </VirtualHost>
 ExtendedStatus On
@@ -60,9 +62,6 @@ ServerName ${PUBLIC_HOSTNAME}
         SSLCertificateFile $KEYDIR/certs/${PUBLIC_HOSTNAME}.crt
         ${CHAINSPEC}
         SSLCertificateKeyFile $KEYDIR/private/${PUBLIC_HOSTNAME}.key
-        SSLCACertificateFile /etc/ssl/certs/${PUBLIC_HOSTNAME}-client-ca.crt
-        SSLVerifyClient optional
-        SSLVerifyDepth 1
         DocumentRoot /var/www/
         
         ServerAdmin operations@swamid.se
@@ -71,18 +70,19 @@ ServerName ${PUBLIC_HOSTNAME}
 
         ServerSignature off
         Alias /md /opt/published-metadata/
-        <Directory /opt/published-metadata>
-          Options Indexes
-        </Directory>
-
-        Alias /xslt /opt/swamid-metadata/xslt/
+       <Directory /opt/published-metadata>
+          Require all granted
+          Options Indexes FollowSymLinks
+       </Directory>
+       Alias /xslt /opt/swamid-metadata/xslt/
         <Directory /opt/swamid-metadata/xslt>
-          Options Indexes
+          Require all granted
+          Options Indexes FollowSymLinks
         </Directory>
-
-        <Directory /var/www>
-          Options -Indexes
-        </Directory>
+       <Directory /var/www>
+          Require all granted
+          Options -Indexes +FollowSymLinks
+       </Directory>
 </VirtualHost>
 EOF
 
