@@ -32,9 +32,13 @@ cat>/etc/apache2/sites-available/default.conf<<EOF
 <VirtualHost _default_:80>
        ServerAdmin operations@swamid.se
        DocumentRoot /var/www/
-       ServerName md.swamid.se
-       Alias /md /opt/published-metadata/
-       <Directory /opt/published-metadata>
+       ServerName ${PUBLIC_HOSTNAME}
+
+       ProxyPass /.well-known/acme-challenge/ http://acme-c.sunet.se/.well-known/acme-challenge/
+       ProxyPassReverse /.well-known/acme-challenge/ http://acme-c.sunet.se/.well-known/acme-challenge/
+
+       Alias /md /opt/published-metadata/${PUBLIC_HOSTNAME}
+       <Directory /opt/published-metadata/${PUBLIC_HOSTNAME}>
           Require all granted
           Options Indexes FollowSymLinks
        </Directory>
@@ -69,8 +73,8 @@ ServerName ${PUBLIC_HOSTNAME}
         AddDefaultCharset utf-8
 
         ServerSignature off
-        Alias /md /opt/published-metadata/
-       <Directory /opt/published-metadata>
+        Alias /md /opt/published-metadata/${PUBLIC_HOSTNAME}
+       <Directory /opt/published-metadata/${PUBLIC_HOSTNAME}>
           Require all granted
           Options Indexes FollowSymLinks
        </Directory>
@@ -91,6 +95,7 @@ cat /etc/apache2/sites-available/default-ssl.conf
 
 a2ensite default
 a2ensite default-ssl
+a2enmod proxy proxy_http
 
 rm -f /var/run/apache2/apache2.pid
 
