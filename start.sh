@@ -33,12 +33,16 @@ cat>/etc/apache2/sites-available/default.conf<<EOF
        ServerAdmin operations@swamid.se
        DocumentRoot /var/www/
        ServerName ${PUBLIC_HOSTNAME}
+       ServerAlias ${PUBLIC_HOSTNAMES}
 
        ProxyPass /.well-known/acme-challenge/ http://acme-c.sunet.se/.well-known/acme-challenge/
        ProxyPassReverse /.well-known/acme-challenge/ http://acme-c.sunet.se/.well-known/acme-challenge/
 
-       Alias /md /opt/published-metadata/${PUBLIC_HOSTNAME}
-       <Directory /opt/published-metadata/${PUBLIC_HOSTNAME}>
+       Rewrite "^/$" "/md"
+       RewriteCond "%{HTTP_HOST}" "^(.+)$"
+       Rewrite     "^/md(.*)$" "/opt/published-metadata/%1/$2"
+
+       <Directory /opt/published-metadata>
           Require all granted
           Options Indexes FollowSymLinks
        </Directory>
@@ -59,6 +63,7 @@ cat>/etc/apache2/sites-available/default-ssl.conf<<EOF
 ServerName ${PUBLIC_HOSTNAME}
 <VirtualHost *:443>
         ServerName ${PUBLIC_HOSTNAME}
+        ServerAlias ${PUBLIC_HOSTNAMES}
         SSLProtocol All -SSLv2 -SSLv3
         SSLCompression Off
         SSLCipherSuite "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+AESGCM EECDH EDH+AESGCM EDH+aRSA HIGH !MEDIUM !LOW !aNULL !eNULL !LOW !RC4 !MD5 !EXP !PSK !SRP !DSS"
@@ -73,8 +78,15 @@ ServerName ${PUBLIC_HOSTNAME}
         AddDefaultCharset utf-8
 
         ServerSignature off
-        Alias /md /opt/published-metadata/${PUBLIC_HOSTNAME}
-       <Directory /opt/published-metadata/${PUBLIC_HOSTNAME}>
+
+       ProxyPass /.well-known/acme-challenge/ http://acme-c.sunet.se/.well-known/acme-challenge/
+       ProxyPassReverse /.well-known/acme-challenge/ http://acme-c.sunet.se/.well-known/acme-challenge/
+
+       Rewrite "^/$" "/md"
+       RewriteCond "%{HTTP_HOST}" "^(.+)$"
+       Rewrite     "^/md(.*)$" "/opt/published-metadata/%1/$2"
+
+       <Directory /opt/published-metadata>
           Require all granted
           Options Indexes FollowSymLinks
        </Directory>
