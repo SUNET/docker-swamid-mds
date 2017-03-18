@@ -38,9 +38,10 @@ cat>/etc/apache2/sites-available/default.conf<<EOF
        ProxyPass /.well-known/acme-challenge/ http://acme-c.sunet.se/.well-known/acme-challenge/
        ProxyPassReverse /.well-known/acme-challenge/ http://acme-c.sunet.se/.well-known/acme-challenge/
 
-       Rewrite "^/$" "/md"
-       RewriteCond "%{HTTP_HOST}" "^(.+)$"
-       Rewrite     "^/md(.*)$" "/opt/published-metadata/%1/$2"
+       RewriteEngine on
+       RewriteRule "^/\$" "/md/" [R]
+       RewriteCond "%{HTTP_HOST}" "^(.+)\$"
+       RewriteRule "^/md/(.*)\$" "/opt/published-metadata/%1/\$1"
 
        <Directory /opt/published-metadata>
           Require all granted
@@ -82,9 +83,10 @@ ServerName ${PUBLIC_HOSTNAME}
        ProxyPass /.well-known/acme-challenge/ http://acme-c.sunet.se/.well-known/acme-challenge/
        ProxyPassReverse /.well-known/acme-challenge/ http://acme-c.sunet.se/.well-known/acme-challenge/
 
-       Rewrite "^/$" "/md"
-       RewriteCond "%{HTTP_HOST}" "^(.+)$"
-       Rewrite     "^/md(.*)$" "/opt/published-metadata/%1/$2"
+       RewriteEngine on
+       RewriteRule "^/\$" "/md/" [R]
+       RewriteCond "%{HTTP_HOST}" "^(.+)\$"
+       RewriteRule "^/md/(.*)\$" "/opt/published-metadata/%1/\$1"
 
        <Directory /opt/published-metadata>
           Require all granted

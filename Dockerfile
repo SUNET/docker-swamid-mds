@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:14.04
 MAINTAINER leifj@sunet.se
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN apt-get -q update
@@ -14,7 +14,7 @@ COPY /apache2.conf /etc/apache2/
 ADD start.sh /start.sh
 RUN chmod a+rx /start.sh
 ENV PUBLIC_HOSTNAME md.swamid.se
-ENV PUBLIC_HOSTNAMES mds.swamid.se
+ENV PUBLIC_HOSTNAMES mds.swamid.se test.swamid.se
 EXPOSE 443
 EXPOSE 80
 ENTRYPOINT ["/start.sh"]
