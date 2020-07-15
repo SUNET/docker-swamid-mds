@@ -91,6 +91,7 @@ ServerName ${PUBLIC_HOSTNAME}
        <Directory /opt/published-metadata>
           Require all granted
           Options Indexes FollowSymLinks
+          AllowOverride All
        </Directory>
        Alias /xslt /opt/swamid-metadata/xslt/
         <Directory /opt/swamid-metadata/xslt>

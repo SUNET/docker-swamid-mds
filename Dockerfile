@@ -13,8 +13,8 @@ RUN rm -rf /var/www/*
 COPY /apache2.conf /etc/apache2/
 ADD start.sh /start.sh
 RUN chmod a+rx /start.sh
-ENV PUBLIC_HOSTNAME md.swamid.se
-ENV PUBLIC_HOSTNAMES mds.swamid.se test.swamid.se
+ENV PUBLIC_HOSTNAME mds.swamid.se
+ENV PUBLIC_HOSTNAMES test.swamid.se
 EXPOSE 443
 EXPOSE 80
 ENTRYPOINT ["/start.sh"]
