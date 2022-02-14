@@ -42,6 +42,7 @@ cat>/etc/apache2/sites-available/default.conf<<EOF
        RewriteRule "^/\$" "/md/" [R]
        RewriteCond "%{HTTP_HOST}" "^(.+)\$"
        RewriteRule "^/md/(.*)\$" "/opt/published-metadata/%1/\$1"
+       RewriteRule "^/md$" "https://mds.swamid.se/md/"
 
        <Directory /opt/published-metadata>
           Require all granted
@@ -87,6 +88,7 @@ ServerName ${PUBLIC_HOSTNAME}
        RewriteRule "^/\$" "/md/" [R]
        RewriteCond "%{HTTP_HOST}" "^(.+)\$"
        RewriteRule "^/md/(.*)\$" "/opt/published-metadata/%1/\$1"
+       RewriteRule "^/md$" "https://mds.swamid.se/md/"
 
        <Directory /opt/published-metadata>
           Require all granted
